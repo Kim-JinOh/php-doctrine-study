@@ -147,3 +147,4 @@ public class OrderTest {
     }
 }
 ```
+* References : [Source files available though github][https://github.com/link-intersystems/blog/tree/master/anemic-vs-rich-domain-model]
