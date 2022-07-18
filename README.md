@@ -2,8 +2,8 @@
 
 ## anemic model VS rich model
 anemic model은 데이터와 논리가 분리된 구조.
-    public class OrderTest {
-
+```java
+public class OrderTest {
     /**
     * This test shows that an anemic model can be in an inconsistent state,
     * because it doesn't handle it's state changes. So an anemic model can
@@ -66,4 +66,5 @@ anemic model은 데이터와 논리가 분리된 구조.
         BigDecimal totalAfterRecalculation = order.getTotal();
         assertEquals(expectedTotal, totalAfterRecalculation);
     }
-    }
+}
+```
