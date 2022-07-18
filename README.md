@@ -1,7 +1,86 @@
 # php-doctrine-study
 
 ## anemic model VS rich model
+
+### anemic model
 anemic model은 데이터와 논리가 분리된 구조.
+* anemic model domain example
+```java
+public class Order {
+   private BigDecimal total = BigDecimal.ZERO;
+   private List<OrderItem> items = new ArrayList<OrderItem>();
+
+   public BigDecimal getTotal() {
+      return total;
+   }
+
+   public void setTotal(BigDecimal total) {
+      this.total = total;
+   }
+
+   public List<OrderItem> getItems() {
+      return items;
+   }
+
+   public void setItems(List<OrderItem> items) {
+      this.items = items;
+   }
+}
+
+public class OrderItem {
+   private BigDecimal price = BigDecimal.ZERO;
+   private int quantity;
+   private String name;
+
+   public BigDecimal getPrice() {
+      return price;
+   }
+
+   public void setPrice(BigDecimal price) {
+     this.price = price;
+   }
+
+   public int getQuantity() {
+     return quantity;
+   }
+
+   public void setQuantity(int quantity) {
+     this.quantity= quantity;
+   }
+
+...
+
+}
+```
+
+* anemic model service example
+```java
+public class OrderService {
+
+   public void calculateTotal(Order order) {
+      if (order == null) {
+          throw new IllegalArgumentException("order must not be null");
+      }
+
+      BigDecimal total = BigDecimal.ZERO;
+      List<OrderItem> items = order.getItems();
+
+      for (OrderItem orderItem : items) {
+          int quantity = orderItem.getQuantity();
+          BigDecimal price = orderItem.getPrice();
+          BigDecimal itemTotal = price.multiply(new BigDecimal(quantity));
+          total = total.add(itemTotal);
+     }
+     order.setTotal(total);
+   }
+}
+```
+
+* anemic model test
+아래의 테스트에서 anemic model의 단점을 볼 수 있다
+anemic model은 논리와 데이터가 분리 되어 있기 때문에
+항상 합법적인 상태를 보증 할 수 없다.
+    BigDecimal totalAfterItemAdd = order.getTotal(); --참조
 ```java
 public class OrderTest {
     /**
