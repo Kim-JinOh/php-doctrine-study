@@ -1,30 +1,62 @@
 <?php
+// src/User.php
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="users")
+ */
 class User
 {
-    private $banned;
-    private $username;
-    private $passwordHash;
-    private $bans;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $id;
 
-    public function toNickname(): string
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Bug", mappedBy="reporter")
+     * @var Bug[] An ArrayCollection of Bug objects.
+     */
+    private $reportedBugs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Bug", mappedBy="engineer")
+     * @var Bug[] An ArrayCollection of Bug objects.
+     */
+    private $assignedBugs;
+
+    public function getId()
     {
-        return $this->username;
+        return $this->id;
     }
 
-    public function authenticate(string $password, callable $checkHash): bool
+    public function getName()
     {
-        return $checkHash($password, $this->passwordHash) && ! $this->hasActiveBans();
+        return $this->name;
     }
 
-    public function changePassword(string $password, callable $hash): void
+    public function setName($name)
     {
-        $this->passwordHash = $hash($password);
+        $this->name = $name;
     }
 
-    public function ban(\DateInterval $duration): void
+    public function addReportedBug(Bug $bug)
     {
-        assert($duration->invert !== 1);
+        $this->reportedBugs[] = $bug;
+    }
 
-        $this->bans[] = new Ban($this);
+    public function assignedToBug(Bug $bug)
+    {
+        $this->assignedBugs[] = $bug;
     }
 }

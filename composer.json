@@ -1,8 +1,8 @@
 {
     "name": "jokim/php-doctrine-study",
     "autoload": {
-        "psr-4": {
-            "Jokim\\PhpDoctrineStudy\\": "src/"
+        "psr-0": {
+            "": "src/"
         }
     },
     "authors": [
